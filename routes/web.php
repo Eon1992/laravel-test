@@ -31,3 +31,9 @@ Route::get('/updateUserNotifications/{id}/{uid}', [HomeController::class, 'updat
 Route::get('/getUserNotifications/{id}', [HomeController::class, 'getUserNotifications']);
 
 Route::post('/saveNotification', [HomeController::class, 'saveNotification'])->name('saveNotification');
+
+Route::post('/updateUserProfile', [HomeController::class, 'updateUserProfile'])->name('updateUserProfile');
+
+Route::post('/sendOtp', [HomeController::class, 'sendOtp'])->name('sendOtp');
+
+Route::post('/verifyOtp', [HomeController::class, 'verifyOtp'])->name('verifyOtp');

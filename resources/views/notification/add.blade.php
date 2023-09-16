@@ -27,10 +27,8 @@
                 <div class="col-xl-6">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Form Controls </h4>
-                            <p class="card-subtitle mb-4">Textual form controls—like <code>input</code>s,<code>
-                                    selects</code>, and<code> textare</code>s—are styled with the .form-control class.
-                                Included are styles for general appearance, focus state, sizing, and more. </p>
+                            <h4 class="card-title">Add Notification </h4>
+
 
                             <form class="needs-validation" novalidate action="{{ route('saveNotification') }}"
                                 method="POST">
@@ -77,7 +75,7 @@
 
                                 <div class="form-group">
                                     <label for="validationCustom04">Expiration Date</label>
-                                    <input type="text" class="form-control" id="validationCustom04"
+                                    <input type="text" class="form-control datepicker" id="validationCustom04"
                                         data-provide="datepicker" value="" required name="expiration">
                                     <div class="valid-feedback">
                                         Looks good!

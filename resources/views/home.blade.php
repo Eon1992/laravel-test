@@ -72,7 +72,7 @@
                                         <th>Email</th>
                                         <th>Start Date</th>
                                         <th>Action</th>
-                                        <th>Pending Notifications</th>
+                                        <th>Total Notifications</th>
                                     </tr>
                                 </thead>
 
@@ -86,7 +86,7 @@
                                             <td><a href="{{ url('getUserProfile/') . '/' . $user['id'] }}"><button
                                                         class="btn btn-primary waves-effect waves-light">Check</button></a>
                                             </td>
-                                            <td>: 0</td>
+                                            <td>: {{ count($user['user_notifications']) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

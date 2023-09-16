@@ -30,53 +30,84 @@
 
                             @if (session('success'))
                                 <div class="alert alert-success" role="alert">
-                                    A simple success alert—check it out!
+                                    {{ session('success') }}
                                 </div>
                             @endif
-                            <form class="needs-validation" novalidate action="{{ route('saveNotification') }}"
+                            <form class="needs-validation" novalidate action="{{ route('updateUserProfile') }}"
                                 method="POST">
                                 @csrf
+
+                                <input type="hidden" id="otpGenerated" class="form-control" value="">
+
+                                <input type="hidden" class="form-control" value="{{ $user['id'] }}" name="id"
+                                    id="userId">
+
+                                <input type="hidden" class="form-control" value="{{ $user['otpVerified'] }}"
+                                    id="otpVerified">
+
                                 <div class="form-group">
-                                    <label for="validationCustom01">Title</label>
-                                    <input type="text" class="form-control" id="validationCustom01" placeholder="Title"
-                                        value="" required name="title">
+                                    <label for="validationCustom01">Name</label>
+                                    <input type="text" class="form-control" id="validationCustom01"
+                                        placeholder="Full Name" value="{{ $user['name'] }}" required name="name">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                     <div class="invalid-feedback">
-                                        Please Enter a title.
+                                        Please Enter Full Name.
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="validationCustom02">Select Type</label>
-                                    <select class="form-control" id="validationCustom02" required name="type">
-                                        <option value=""> Select </option>
-                                        <option value="1">Market</option>
-                                        <option value="2">Invoice</option>
-                                        <option value="3">System</option>
-                                    </select>
+                                    <label for="validationCustom05">Notification Switch</label>
+                                    <br>
+                                    <input type="checkbox" {{ $user['notificationSwitch'] == '1' ? 'checked' : '' }}
+                                        data-toggle="switchery" data-color="#2e7ce4" name="notificationSwitch" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="validationCustom02">Email</label>
+                                    <input type="text" class="form-control" id="validationCustom02" placeholder="Email"
+                                        value="{{ $user['email'] }}" required name="email">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                     <div class="invalid-feedback">
-                                        Please Select Type.
+                                        Please Enter Email.
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="validationCustom03">Short Text</label>
-                                    <input type="text" class="form-control" id="validationCustom03"
-                                        placeholder="Short Text" value="" required name="shortText">
+                                    <label for="validationCustom03">Phone</label>
+                                    <input type="text" class="form-control phone" id="validationCustom03"
+                                        placeholder="Phone" maxlength="10" minlength="10" value="{{ $user['phone'] }}"
+                                        required name="phone">
                                     <div class="valid-feedback">
                                         Looks good!
                                     </div>
                                     <div class="invalid-feedback">
-                                        Please Enter a short text.
+                                        Please Enter a Phone Number.
                                     </div>
                                 </div>
 
-                                <button class="btn btn-primary waves-effect waves-light" type="submit">Submit form</button>
+                                <div class="form-group" style="display: none" id="otp">
+                                    <input type="text" class="form-control" placeholder="OTP" value=""
+                                        id="otpVal">
+                                </div>
+
+                                <div class="form-group">
+
+                                    <button class="btn btn-primary waves-effect waves-light" id="otpBtn"
+                                        type="button">Validate OTP</button>
+
+                                    <button class="btn btn-primary waves-effect waves-light" style="display: none"
+                                        id="confirmOtpBtn" type="button">Confirm OTP</button>
+
+                                    <button class="btn btn-primary waves-effect waves-light" id="submitButton"
+                                        style="display: none" type="submit">Submit</button>
+
+                                </div>
+
+
 
                             </form>
                         </div>

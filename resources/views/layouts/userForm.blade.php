@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8" />
     <title>Scoxe - Admin & Dashboard Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,7 +15,7 @@
 
     <link href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
-
+    <link href="{{ asset('assets/plugins/switchery/switchery.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App css -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
@@ -99,35 +100,16 @@
                             aria-expanded="false">
                             <img class="rounded-circle header-profile-user"
                                 src="{{ asset('assets/images/users/avatar-3.jpg') }}" alt="Header Avatar">
-                            <span class="d-none d-sm-inline-block ml-1">{{ Auth::user()->name }}</span>
+                            <span class="d-none d-sm-inline-block ml-1">{{ $user['name'] }}</span>
                             <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Inbox</span>
-                                <span>
-                                    <span class="badge badge-pill badge-info">3</span>
-                                </span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
+                                href="{{ url('getUserProfile/') . '/' . $user['id'] }}">
                                 <span>Profile</span>
-                                <span>
+                                {{-- <span>
                                     <span class="badge badge-pill badge-warning">1</span>
-                                </span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                Settings
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Lock Account</span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Log Out</span>
+                                </span> --}}
                             </a>
                         </div>
                     </div>
@@ -153,8 +135,8 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('notifications') }}" class="waves-effect"><i
-                                    class="feather-airplay"></i><span>Notifications</span></a>
+                            <a href="{{ url('getUserNotifications/') . '/' . $user['id'] }}" class="waves-effect"><i
+                                    class="feather-airplay"></i><span>My Notifications</span></a>
                         </li>
 
 
@@ -212,15 +194,123 @@
     <script src="{{ asset('assets/plugins/moment/moment.js') }}"></script>
     <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
-
+    <script src="{{ asset('assets/plugins/switchery/switchery.min.js') }}"></script>
     <!-- Validation custom js-->
     <script src="{{ asset('assets/pages/validation-demo.js') }}"></script>
 
     <!-- Custom Js -->
-    <script src="assets/pages/advanced-plugins-demo.js"></script>
+    <script src="{{ asset('assets/pages/advanced-plugins-demo.js') }}"></script>
 
     <!-- App js -->
     <script src="{{ asset('assets/js/theme.js') }}"></script>
+
+
+    <script>
+        $(function() {
+
+            var otpVerified = $('#otpVerified').val();
+
+            if (otpVerified == '1') {
+
+                $('#otpBtn').hide();
+                $('#submitButton').show();
+
+            }
+
+            setInterval(function() {
+                $(".alert").fadeOut();
+            }, 3000);
+
+        });
+
+
+        $('body').on('click', '#confirmOtpBtn', function() {
+
+            if ($('#otpVal').val() === $('#otpGenerated').val()) {
+
+                var userId = $('#userId').val();
+
+                var phone = $('.phone').val();
+
+                $.ajax({
+                    url: "{{ route('verifyOtp') }}",
+                    type: 'post',
+                    data: {
+                        userId: userId,
+                        phone: phone
+                    },
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status == 'success') {
+
+                            alert(response.message);
+
+                            $('#confirmOtpBtn').hide();
+
+                            $('#otpVal').hide();
+
+                            $('#submitButton').show();
+
+                        } else {
+
+                            alert('There was an error in verifying OTP!');
+                        }
+                    },
+                });
+
+            } else {
+
+                alert("Invalid OTP!");
+            }
+
+        });
+
+        $('body').on('click', '#otpBtn', function() {
+
+            if ($('.phone').val().length == 10) {
+
+                var phone = $('.phone').val();
+
+                $.ajax({
+                    url: "{{ route('sendOtp') }}",
+                    type: 'post',
+                    data: {
+                        phone: phone
+                    },
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status == 'success') {
+
+                            alert(response.otp);
+
+                            $('#otpGenerated').val(response.otp);
+
+                            $('#otp').show();
+
+                            $('#otpBtn').hide();
+
+                            $('#confirmOtpBtn').show();
+
+                        } else {
+
+                            alert('There was an error in sending OTP!');
+                        }
+                    },
+                });
+
+            } else {
+
+                alert('Please enter valid Phone No.');
+            }
+
+        })
+    </script>
 
 </body>
 

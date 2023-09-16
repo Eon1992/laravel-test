@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'notificationSwitch',
+        'otpVerified'
     ];
 
     /**
@@ -43,6 +45,6 @@ class User extends Authenticatable
     ];
 
     public function userNotifications(){
-        return $this->hasMany(UserNotificationMappings::class,'notificationId','id');
+        return $this->hasMany(UserNotificationMappings::class,'userId','id');
     }
 }

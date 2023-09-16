@@ -126,31 +126,11 @@
                             <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
+                            <a class="dropdown-item d-flex align-items-center justify-content-between logoutBtn"
                                 href="javascript:void(0)">
-                                <span>Inbox</span>
-                                <span>
-                                    <span class="badge badge-pill badge-info">3</span>
-                                </span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Profile</span>
-                                <span>
-                                    <span class="badge badge-pill badge-warning">1</span>
-                                </span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                Settings
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Lock Account</span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Log Out</span>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>Logout
                             </a>
                         </div>
                     </div>
@@ -244,6 +224,15 @@
 
     <!-- App js -->
     <script src="{{ asset('assets/js/theme.js') }}"></script>
+
+    <script>
+        $('body').on('click', '.logoutBtn', function() {
+
+
+            $('#logout-form').submit();
+
+        });
+    </script>
 
 </body>
 
